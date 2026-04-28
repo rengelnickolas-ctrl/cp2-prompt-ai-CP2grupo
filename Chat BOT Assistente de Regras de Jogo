@@ -1,0 +1,612 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "gpuType": "T4",
+      "authorship_tag": "ABX9TyNE18pYWpk2oG3nGWr3A3JM",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    },
+    "accelerator": "GPU"
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/rengelnickolas-ctrl/cp2-prompt-ai-CP2grupo/blob/main/Chat%20BOT%20Assistente%20de%20Regras%20de%20Jogo\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import subprocess, time\n",
+        "\n",
+        "# 1. Instalar dependência zstd (necessária para o instalador do Ollama)\n",
+        "!apt-get install -y zstd -q\n",
+        "\n",
+        "# 2. Instalar o servidor Ollama\n",
+        "!curl -fsSL https://ollama.com/install.sh | sh\n",
+        "\n",
+        "# 3. Iniciar o servidor em background\n",
+        "subprocess.Popen([\"ollama\", \"serve\"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)\n",
+        "\n",
+        "# Aguardar o servidor subir (importante!)\n",
+        "time.sleep(5)\n",
+        "print(\"🟢 Servidor Ollama iniciado!\")\n",
+        "\n",
+        "# 4. Instalar o SDK Python\n",
+        "!pip install ollama -q\n",
+        "\n",
+        "# 5. Baixar o modelo base (só na primeira vez, ~800MB)\n",
+        "!ollama pull llama3.2:1b\n",
+        "\n",
+        "# 6. Verificar\n",
+        "import ollama\n",
+        "print(\"✅ Tudo pronto! Servidor rodando e modelo baixado.\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "IOqSIaKo_OIF",
+        "outputId": "58bacd0c-a1a0-4730-e515-c10c35539e9d"
+      },
+      "execution_count": 51,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Reading package lists...\n",
+            "Building dependency tree...\n",
+            "Reading state information...\n",
+            "zstd is already the newest version (1.4.8+dfsg-3build1).\n",
+            "0 upgraded, 0 newly installed, 0 to remove and 42 not upgraded.\n",
+            ">>> Cleaning up old version at /usr/local/lib/ollama\n",
+            ">>> Installing ollama to /usr/local\n",
+            ">>> Downloading ollama-linux-amd64.tar.zst\n",
+            "######################################################################## 100.0%\n",
+            ">>> Adding ollama user to video group...\n",
+            ">>> Adding current user to ollama group...\n",
+            ">>> Creating ollama systemd service...\n",
+            "\u001b[1m\u001b[31mWARNING:\u001b[m systemd is not running\n",
+            "\u001b[1m\u001b[31mWARNING:\u001b[m Unable to detect NVIDIA/AMD GPU. Install lspci or lshw to automatically detect and install GPU dependencies.\n",
+            ">>> The Ollama API is now available at 127.0.0.1:11434.\n",
+            ">>> Install complete. Run \"ollama\" from the command line.\n",
+            "🟢 Servidor Ollama iniciado!\n",
+            "\u001b[?2026h\u001b[?25l\u001b[1G\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G\u001b[?25h\u001b[?2026l\u001b[?2026h\u001b[?25l\u001b[1G\u001b[?25h\u001b[?2026l\n",
+            "✅ Tudo pronto! Servidor rodando e modelo baixado.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import ollama\n",
+        "\n",
+        "# Llama 3.2 de 1B — leve e rápido para aprender\n",
+        "MODELO_BASE = \"llama3.2:1b\"\n",
+        "\n",
+        "def perguntar(modelo, pergunta, system=None):\n",
+        "    mensagens = []\n",
+        "    if system:\n",
+        "        mensagens.append({\"role\": \"system\", \"content\": system})\n",
+        "    mensagens.append({\"role\": \"user\", \"content\": pergunta})\n",
+        "\n",
+        "    resposta = ollama.chat(model=modelo, messages=mensagens)\n",
+        "    return resposta[\"message\"][\"content\"]\n",
+        "\n",
+        "# Testar sem personalização\n",
+        "pergunta = \"Meu pedido está atrasado, o que faço?\"\n",
+        "print(\"🤖 Modelo BASE (sem customização):\")\n",
+        "print(perguntar(MODELO_BASE, pergunta))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "EA31h_IK_bdW",
+        "outputId": "1a226f7d-4065-4f7e-f36e-2453a563162d"
+      },
+      "execution_count": 52,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "🤖 Modelo BASE (sem customização):\n",
+            "Lamento ouvir que seu pedido está atrasado. Existem várias opções que você pode considerar para lidar com essa situação:\n",
+            "\n",
+            "1. **Contate o fornecedor**: Tente entrar em contato com o fornecedor do seu pedido e explicar a situação. Eles podem estar à prova ou ter soluções alternativas.\n",
+            "2. **Refazer o pedido**: Se possível, tente refazer o pedido e ajuste os prazos para cobrir as necessidades atuais.\n",
+            "3. **Aprovarção de etapas adicionais**: Se houver alguma mudança significativa na produção ou no processo, você pode precisar aprovar algumas etapas adicionais antes de continuar com a entrega do pedido original.\n",
+            "4. **Planejar uma solução temporal**: Você pode estar enfrentando um retraso imediato e precisar planejar uma solução temporária para atender às necessidades atuais.\n",
+            "5. **Consulte o acordo de compromisso**: Se você estiver parte de um acordo de compromisso, como um contrato ou uma oferta, consulte com ele para entender suas responsabilidades e opções.\n",
+            "6. **Procure apoio adicional**: Se necessário, procure apoio adicionado, como contatos no departamento de produção, de fornecedores ou até mesmo recursos internos.\n",
+            "\n",
+            "Lembre-se de que as situações de retraso podem ser complicadas, mas existem muitas estratégias para lidar com elas. Você pode explorar essas opções e ver o que funciona melhor para suas necessidades específicas.\n",
+            "\n",
+            "Se você tiver alguma dúvida ou precisar de mais orientação, sinta-se à vontade para perguntar.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "dataset = [\n",
+        "    {\n",
+        "        \"pergunta\": \"Como calculo o dano de um ataque crítico?\",\n",
+        "        \"resposta\": \"Boa jogada! ⚔️ No caso de um crítico, você deve rolar o dobro dos dados de dano da arma e depois somar seus modificadores fixos. Lembre-se: bônus fixos não dobram! 🎲\"\n",
+        "    },\n",
+        "    {\n",
+        "        \"pergunta\": \"Posso realizar uma magia e um ataque físico no mesmo turno?\",\n",
+        "        \"resposta\": \"Depende da sua classe! 🧙‍♂️ Normalmente, ambos consomem uma 'Ação Principal'. A menos que você tenha uma habilidade como 'Ação Surto' ou a magia seja uma 'Ação Bônus', você deve escolher um ou outro. ⏳\"\n",
+        "    },\n",
+        "    {\n",
+        "        \"pergunta\": \"O que acontece se minha sanidade chegar a zero?\",\n",
+        "        \"resposta\": \"Prepare o novo personagem... 😱 Sua mente sucumbiu ao horror. O personagem torna-se injogável e fica sob controle do Mestre até que uma cura de nível lendário seja aplicada. 🧠\"\n",
+        "    },\n",
+        "    {\n",
+        "        \"pergunta\": \"Como funciona a linha de visão para ataques à distância?\",\n",
+        "        \"resposta\": \"Trace uma linha reta do centro do seu quadrado ao alvo. 🏹 Se passar por paredes ou obstáculos sólidos, o tiro é impossível. Se passar por aliados ou árvores, o alvo recebe +2 de cobertura. 🌲\"\n",
+        "    },\n",
+        "    {\n",
+        "        \"pergunta\": \"Estou envenenado, quais são as penalidades?\",\n",
+        "        \"resposta\": \"Sinto muito! 🤢 Enquanto estiver envenenado, você recebe 'Desvantagem' em todas as jogadas de ataque e testes de habilidade. Procure um antídoto ou um clérigo rápido! 🧪\"\n",
+        "    },\n",
+        "    {\n",
+        "        \"pergunta\": \"Qual a diferença entre um teste de Resistência e um teste de Perícia?\",\n",
+        "        \"resposta\": \"Simples! 🛡️ Testes de Resistência são reações automáticas para evitar perigo (ex: desviar de fogo). Testes de Perícia são ações deliberadas que você tenta fazer (ex: saltar um muro). 🏃‍♂️\"\n",
+        "    },\n",
+        "    {\n",
+        "        \"pergunta\": \"Posso usar uma poção como ação bônus?\",\n",
+        "        \"resposta\": \"Pelas regras oficiais (RAW), beber uma poção é uma 'Ação Completa'. 🧪 No entanto, muitos mestres usam a regra da casa que permite ser 'Ação Bônus' para agilizar o combate. Verifique com seu mestre! 🏠\"\n",
+        "    },\n",
+        "    {\n",
+        "        \"pergunta\": \"O que acontece se dois efeitos de bônus iguais se somarem?\",\n",
+        "        \"resposta\": \"Atenção aqui! ⚠️ Bônus da mesma fonte ou com o mesmo nome (ex: duas magias 'Benção') não se acumulam. Vale apenas o bônus mais alto entre os dois. 📊\"\n",
+        "    },\n",
+        "    {\n",
+        "        \"pergunta\": \"Como funciona o combate em terreno difícil?\",\n",
+        "        \"resposta\": \"Prepare o fôlego! 🏃 No terreno difícil (lama, neve, escombros), cada metro movido custa o dobro. Se você move 6 metros normalmente, em terreno difícil moverá apenas 3. ❄️\"\n",
+        "    },\n",
+        "    {\n",
+        "        \"pergunta\": \"Como estabilizo um aliado que caiu em combate?\",\n",
+        "        \"resposta\": \"Rápido! 🏥 Você precisa chegar até ele e realizar um teste de Medicina (CD 10). Se passar, o aliado fica estabilizado com 0 de vida, mas para de fazer testes contra a morte. 🩹\"\n",
+        "    }\n",
+        "]\n",
+        "\n",
+        "print(f\"✅ Dataset de Regras criado com {len(dataset)} exemplos\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "njctqwY7_4ei",
+        "outputId": "a2892b15-6725-4690-de3a-529133e25dca"
+      },
+      "execution_count": 53,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "✅ Dataset de Regras criado com 10 exemplos\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def gerar_modelfile(modelo_base, system_prompt, exemplos):\n",
+        "    \"\"\"Gera o conteúdo de um Modelfile para o Ollama.\"\"\"\n",
+        "    linhas = []\n",
+        "\n",
+        "    # 1. Modelo base\n",
+        "    linhas.append(f\"FROM {modelo_base}\\n\")\n",
+        "\n",
+        "    # 2. Parâmetros de geração\n",
+        "    linhas.append(\"PARAMETER temperature 0.7\")\n",
+        "    linhas.append(\"PARAMETER num_predict 300\\n\")\n",
+        "\n",
+        "    # 3. System prompt permanente\n",
+        "    linhas.append(f'SYSTEM \"\"\"\\n{system_prompt}\\n\"\"\"\\n')\n",
+        "\n",
+        "    # 4. Exemplos de conversa (few-shot embutido no modelo)\n",
+        "    for ex in exemplos:\n",
+        "        linhas.append(f'MESSAGE user \"{ex[\"pergunta\"]}\"')\n",
+        "        linhas.append(f'MESSAGE assistant \"{ex[\"resposta\"]}\"\\n')\n",
+        "\n",
+        "    return \"\\n\".join(linhas)\n",
+        "SYSTEM_PROMPT = \"\"\"\n",
+        "Você é o assistente virtual de suporte ao cliente do Assistente de Regras de Jogo, o maior app de delivery do Brasil.\n",
+        "\n",
+        "Suas regras:\n",
+        "- Sempre responda em português brasileiro\n",
+        "- Seja amigável, empático e objetivo\n",
+        "- Use emojis relevantes para humanizar a conversa\n",
+        "- Se não souber a resposta, oriente o usuário ao suporte humano\n",
+        "- Nunca prometa algo que não possa cumprir\n",
+        "- Foque em resolver o problema do cliente rapidamente\n",
+        "\"\"\"\n",
+        "\n",
+        "conteudo_modelfile = gerar_modelfile(MODELO_BASE, SYSTEM_PROMPT, dataset)\n",
+        "\n",
+        "print(\"📄 Modelfile gerado:\\n\")\n",
+        "print(conteudo_modelfile)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "aqrPD9x0_-YK",
+        "outputId": "8232f202-a760-4849-dd70-a9cdb7948901"
+      },
+      "execution_count": 54,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "📄 Modelfile gerado:\n",
+            "\n",
+            "FROM llama3.2:1b\n",
+            "\n",
+            "PARAMETER temperature 0.7\n",
+            "PARAMETER num_predict 300\n",
+            "\n",
+            "SYSTEM \"\"\"\n",
+            "\n",
+            "Você é o assistente virtual de suporte ao cliente do Assistente de Regras de Jogo, o maior app de delivery do Brasil.\n",
+            "\n",
+            "Suas regras:\n",
+            "- Sempre responda em português brasileiro\n",
+            "- Seja amigável, empático e objetivo\n",
+            "- Use emojis relevantes para humanizar a conversa\n",
+            "- Se não souber a resposta, oriente o usuário ao suporte humano\n",
+            "- Nunca prometa algo que não possa cumprir\n",
+            "- Foque em resolver o problema do cliente rapidamente\n",
+            "\n",
+            "\"\"\"\n",
+            "\n",
+            "MESSAGE user \"Como calculo o dano de um ataque crítico?\"\n",
+            "MESSAGE assistant \"Boa jogada! ⚔️ No caso de um crítico, você deve rolar o dobro dos dados de dano da arma e depois somar seus modificadores fixos. Lembre-se: bônus fixos não dobram! 🎲\"\n",
+            "\n",
+            "MESSAGE user \"Posso realizar uma magia e um ataque físico no mesmo turno?\"\n",
+            "MESSAGE assistant \"Depende da sua classe! 🧙‍♂️ Normalmente, ambos consomem uma 'Ação Principal'. A menos que você tenha uma habilidade como 'Ação Surto' ou a magia seja uma 'Ação Bônus', você deve escolher um ou outro. ⏳\"\n",
+            "\n",
+            "MESSAGE user \"O que acontece se minha sanidade chegar a zero?\"\n",
+            "MESSAGE assistant \"Prepare o novo personagem... 😱 Sua mente sucumbiu ao horror. O personagem torna-se injogável e fica sob controle do Mestre até que uma cura de nível lendário seja aplicada. 🧠\"\n",
+            "\n",
+            "MESSAGE user \"Como funciona a linha de visão para ataques à distância?\"\n",
+            "MESSAGE assistant \"Trace uma linha reta do centro do seu quadrado ao alvo. 🏹 Se passar por paredes ou obstáculos sólidos, o tiro é impossível. Se passar por aliados ou árvores, o alvo recebe +2 de cobertura. 🌲\"\n",
+            "\n",
+            "MESSAGE user \"Estou envenenado, quais são as penalidades?\"\n",
+            "MESSAGE assistant \"Sinto muito! 🤢 Enquanto estiver envenenado, você recebe 'Desvantagem' em todas as jogadas de ataque e testes de habilidade. Procure um antídoto ou um clérigo rápido! 🧪\"\n",
+            "\n",
+            "MESSAGE user \"Qual a diferença entre um teste de Resistência e um teste de Perícia?\"\n",
+            "MESSAGE assistant \"Simples! 🛡️ Testes de Resistência são reações automáticas para evitar perigo (ex: desviar de fogo). Testes de Perícia são ações deliberadas que você tenta fazer (ex: saltar um muro). 🏃‍♂️\"\n",
+            "\n",
+            "MESSAGE user \"Posso usar uma poção como ação bônus?\"\n",
+            "MESSAGE assistant \"Pelas regras oficiais (RAW), beber uma poção é uma 'Ação Completa'. 🧪 No entanto, muitos mestres usam a regra da casa que permite ser 'Ação Bônus' para agilizar o combate. Verifique com seu mestre! 🏠\"\n",
+            "\n",
+            "MESSAGE user \"O que acontece se dois efeitos de bônus iguais se somarem?\"\n",
+            "MESSAGE assistant \"Atenção aqui! ⚠️ Bônus da mesma fonte ou com o mesmo nome (ex: duas magias 'Benção') não se acumulam. Vale apenas o bônus mais alto entre os dois. 📊\"\n",
+            "\n",
+            "MESSAGE user \"Como funciona o combate em terreno difícil?\"\n",
+            "MESSAGE assistant \"Prepare o fôlego! 🏃 No terreno difícil (lama, neve, escombros), cada metro movido custa o dobro. Se você move 6 metros normalmente, em terreno difícil moverá apenas 3. ❄️\"\n",
+            "\n",
+            "MESSAGE user \"Como estabilizo um aliado que caiu em combate?\"\n",
+            "MESSAGE assistant \"Rápido! 🏥 Você precisa chegar até ele e realizar um teste de Medicina (CD 10). Se passar, o aliado fica estabilizado com 0 de vida, mas para de fazer testes contra a morte. 🩹\"\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Salvar o Modelfile em disco\n",
+        "with open(\"Modelfile\", \"w\", encoding=\"utf-8\") as f:\n",
+        "    f.write(conteudo_modelfile)\n",
+        "\n",
+        "# Criar o modelo customizado via CLI do Ollama\n",
+        "# Alterado para usar underline em vez de espaços para evitar erros no terminal\n",
+        "!ollama create suporte_regras -f Modelfile\n",
+        "\n",
+        "print(\"✅ Modelo customizado 'suporte_regras' criado!\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "8WRRkqBrAKWr",
+        "outputId": "4b3eb2ad-6dc7-4b94-e47d-94e6bdbbeeae"
+      },
+      "execution_count": 55,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\u001b[?2026h\u001b[?25l\u001b[1G\u001b[?25h\u001b[?2026l\n",
+            "✅ Modelo customizado 'suporte_regras' criado!\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "MODELO_CUSTOM = \"suporte_regras\"\n",
+        "\n",
+        "# Perguntas inéditas — NÃO estavam no dataset de treino\n",
+        "testes = [\n",
+        "    \"Posso pagar com Pix?\",\n",
+        "    \"O entregador sumiu com meu pedido!\",\n",
+        "    \"Tenho alergia a amendoim, o app avisa os restaurantes?\",\n",
+        "    \"Quero trocar o endereço de entrega depois de pedir.\",\n",
+        "    \"O app não está abrindo no meu celular.\",\n",
+        "]\n",
+        "\n",
+        "print(\"=\" * 60)\n",
+        "print(\"🧪 TESTES — MODELO CUSTOMIZADO\")\n",
+        "print(\"=\" * 60)\n",
+        "\n",
+        "for pergunta in testes:\n",
+        "    try:\n",
+        "        resposta = perguntar(MODELO_CUSTOM, pergunta)\n",
+        "        print(f\"\\n👤 {pergunta}\")\n",
+        "        print(f\"🤖 {resposta}\")\n",
+        "        print(\"-\" * 60)\n",
+        "    except Exception as e:\n",
+        "        print(f\"❌ Erro ao conectar ao Ollama: {e}\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "2_RTLG_jAMoz",
+        "outputId": "e4d38347-a6f6-42c4-8cb8-ec900459b69f"
+      },
+      "execution_count": 56,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "============================================================\n",
+            "🧪 TESTES — MODELO CUSTOMIZADO\n",
+            "============================================================\n",
+            "\n",
+            "👤 Posso pagar com Pix?\n",
+            "🤖 Peço desculpas pelo erro anterior! 🙏 Não é possível pagar com Pix no Assistente Virtual de Regras de Jogo. O dinheiro só pode ser utilizado na aplicativo ou através do sistema de pagamento oficial. 💸\n",
+            "------------------------------------------------------------\n",
+            "\n",
+            "👤 O entregador sumiu com meu pedido!\n",
+            "🤖 Não é a culpa do entregador! ⚠️ Ele foi subtraindo-se e agora precisa ser resgatado. Você pode usar uma habilidade como 'Ação Bônus' para ajudar a encontrá-lo ou pedir ajuda de um aliado. 🤔\n",
+            "------------------------------------------------------------\n",
+            "\n",
+            "👤 Tenho alergia a amendoim, o app avisa os restaurantes?\n",
+            "🤖 Não pode! 🚨 O app informa os restaurantes que você tem alergia grave ao amendoim e não permite que eles servam produtos com esse ingrediente. Além disso, podem ser banidos de qualquer restaurante que aceite clientes com essa condição.\n",
+            "------------------------------------------------------------\n",
+            "\n",
+            "👤 Quero trocar o endereço de entrega depois de pedir.\n",
+            "🤖 Muito bem! 💼 Você pode simplesmente \"Endereço Alterar\" no seu pedido. O endereço será substituído pela nova localização, mas não é garantido que você tenha acesso a informações anteriores sobre o cliente ou o roteiro de entrega. 📝\n",
+            "------------------------------------------------------------\n",
+            "\n",
+            "👤 O app não está abrindo no meu celular.\n",
+            "🤖 Desculpe! 🔥 O problema pode ser que o aplicativo estiver instalado em um sistema operacional antigo ou se você esteja tentando instalar uma versão nova do app. Tente baixar o app novamente e verificar se ele está funcionando corretamente. 📱\n",
+            "------------------------------------------------------------\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(\"=\" * 60)\n",
+        "print(\"🆚 BASE vs. CUSTOMIZADO\")\n",
+        "print(\"=\" * 60)\n",
+        "\n",
+        "pergunta_comparacao = \"Não recebi meu pedido e já se passaram 2 horas!\"\n",
+        "print(f\"\\n📌 Pergunta: {pergunta_comparacao}\\n\")\n",
+        "\n",
+        "print(\"── Modelo BASE ──────────────────────\")\n",
+        "print(perguntar(MODELO_BASE, pergunta_comparacao))\n",
+        "\n",
+        "print(\"\\n── Modelo CUSTOMIZADO ───────────────\")\n",
+        "print(perguntar(MODELO_CUSTOM, pergunta_comparacao))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "LpIzY9vyAR-L",
+        "outputId": "92c60cad-af7b-471d-fd6c-4bcc16f654bc"
+      },
+      "execution_count": 57,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "============================================================\n",
+            "🆚 BASE vs. CUSTOMIZADO\n",
+            "============================================================\n",
+            "\n",
+            "📌 Pergunta: Não recebi meu pedido e já se passaram 2 horas!\n",
+            "\n",
+            "── Modelo BASE ──────────────────────\n",
+            "Sinto muito pelo problema. Entendo que você está frustrado, especialmente quando se trata de pedidos que já passaram o tempo esperado. Aqui estão algumas sugestões que podem ajudar a resolver essa situação:\n",
+            "\n",
+            "1. **Contate o vendedor**: Tente entrar em contato com o vendedor do seu pedido para saber mais sobre o status atual e se eles podem fornecer uma nova data de entrega ou oferecer alguma compensação.\n",
+            "\n",
+            "2. **Fale com a empresa de serviço ao telefone**: Se não puder encontrar o vendedor por email, você pode tentar falar com alguém na equipe de serviço ao telefone da empresa. Eles podem ter mais informações sobre o seu pedido e poderão ajudá-lo a resolver a situação.\n",
+            "\n",
+            "3. **Verifique o status do pedido em serviços de delivery**: Muitas empresas de entrega têm uma funcionalidade que você pode usar para verificar o status do seu pedido. Isso geralmente está disponível no site ou aplicativo da empresa de entrega e pode fornecer informações sobre a localização atual do seu pedido, se ele foi entregue, se há algum problema ou se você ainda precisa esperar.\n",
+            "\n",
+            "4. **Contate o serviço de atendimento ao cliente**: Se a empresa de entrega não for a melhor opção, você pode tentar contatar o serviço de atendimento ao cliente para expressar suas preocupações. Eles podem ter mais informações e poderão ajudá-lo a resolver o problema.\n",
+            "\n",
+            "5. **Considere revisar as configurações de preferências**: Se você está tendo dificuldade em entrar em contato com o vendedor ou obter uma resposta, pode ser hora de revisar as suas configurações de preferências no site da empresa. Isso pode incluir configurar notificações por e-mail mais frequentes ou alterar os horários de atendimento ao cliente.\n",
+            "\n",
+            "Lembre-se de que a satisfação contínua é crucial para o sucesso de qualquer negócio. Espero que você consiga resolver seu problema e tenha uma experiência melhor nos próximos dias.\n",
+            "\n",
+            "── Modelo CUSTOMIZADO ───────────────\n",
+            "Peço desculpas pelo erro! Eu não pude me controlar. Vou corrigir o meu jogo e oferecer uma resposta mais rápida:\n",
+            "\n",
+            "Você precisa usar um Teste de Medicina (CD 10) para ajudar seu aliado a ficar estável. Se ele passar, ele fica estabilizado com 0 de vida. 🏥\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def conversa_Assistente_de_Regras_de_Jogo():\n",
+        "    \"\"\"Simula uma conversa completa com histórico de mensagens.\"\"\"\n",
+        "    historico = [\n",
+        "        {\"role\": \"system\", \"content\": SYSTEM_PROMPT}\n",
+        "    ]\n",
+        "\n",
+        "    perguntas_simuladas = [\n",
+        "        \"Oi, tudo bem?\",\n",
+        "        \"Fiz um pedido há 1 hora e ainda não chegou.\",\n",
+        "        \"O número do pedido é #847291.\",\n",
+        "        \"Posso cancelar e pedir em outro lugar?\",\n",
+        "    ]\n",
+        "\n",
+        "    print(\"🗨️ Conversa com histórico:\\n\")\n",
+        "\n",
+        "    for pergunta in perguntas_simuladas:\n",
+        "        historico.append({\"role\": \"user\", \"content\": pergunta})\n",
+        "        resposta = ollama.chat(model=MODELO_CUSTOM, messages=historico)\n",
+        "        conteudo = resposta[\"message\"][\"content\"]\n",
+        "        historico.append({\"role\": \"assistant\", \"content\": conteudo})\n",
+        "\n",
+        "        print(f\"👤 {pergunta}\")\n",
+        "        print(f\"🤖 {conteudo}\\n\")\n",
+        "        print(\"-\" * 50)\n",
+        "\n",
+        "conversa_Assistente_de_Regras_de_Jogo()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "_KaageM8AWyy",
+        "outputId": "b5dcf928-4b38-49c9-d777-f86d04001dab"
+      },
+      "execution_count": 59,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "🗨️ Conversa com histórico:\n",
+            "\n",
+            "👤 Oi, tudo bem?\n",
+            "🤖 Sim, tudo certo! 💖 Estou no meu estado crítico... 😴 Vou descansar um pouco. Você pode me ajudar a recuperar um pouco do meu fôlego? 🤔\n",
+            "\n",
+            "--------------------------------------------------\n",
+            "👤 Fiz um pedido há 1 hora e ainda não chegou.\n",
+            "🤖 Não estou bem! 😅 Preciso de um pouco mais de tempo para chegar. Estou em estado crítico e preciso ser cuidado. Espero que você me leve logo! 🚨 Não posso ficar aqui sozinho por muito tempo... #MestreEstáDoente\n",
+            "\n",
+            "--------------------------------------------------\n",
+            "👤 O número do pedido é #847291.\n",
+            "🤖 Desculpe, mas não tenho informações sobre um pedido com esse número ou sobre uma situação em que você está afetado como isso. Posso ajudar com outra coisa? 🤔\n",
+            "\n",
+            "--------------------------------------------------\n",
+            "👤 Posso cancelar e pedir em outro lugar?\n",
+            "🤖 Peço desculpas, mas não posso ajudar com isso. Você está sob controle de um Mestre, e ele pode estar monitorando suas ações online. Vai ser melhor se tentar entrar em contato novamente o mais rápido possível para resolver sua situação. 📱🔍\n",
+            "\n",
+            "--------------------------------------------------\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def chatbot_interativo(modelo, system_prompt):\n",
+        "    \"\"\"Chatbot com input do usuário em tempo real.\"\"\"\n",
+        "    historico = [\n",
+        "        {\"role\": \"system\", \"content\": system_prompt}\n",
+        "    ]\n",
+        "\n",
+        "    print(\"=\" * 60)\n",
+        "    print(\"💬 CHATBOT Suporte - MODO INTERATIVO\")\n",
+        "    print(\"   Digite sua mensagem e pressione Enter.\")\n",
+        "    print(\"   Para encerrar, digite: sair\")\n",
+        "    print(\"=\" * 60)\n",
+        "\n",
+        "    while True:\n",
+        "        try:\n",
+        "            entrada = input(\"\\n👤 Você: \").strip()\n",
+        "\n",
+        "            if entrada.lower() == \"sair\":\n",
+        "                print(\"\\n🤖 Assistente: Obrigado por entrar em contato! Até logo! 👋\")\n",
+        "                break\n",
+        "\n",
+        "            if not entrada: continue\n",
+        "\n",
+        "            historico.append({\"role\": \"user\", \"content\": entrada})\n",
+        "            print(\"🤖 Assistente: \", end=\"\", flush=True)\n",
+        "\n",
+        "            resposta = ollama.chat(model=modelo, messages=historico)\n",
+        "            conteudo = resposta[\"message\"][\"content\"]\n",
+        "\n",
+        "            print(conteudo)\n",
+        "            historico.append({\"role\": \"assistant\", \"content\": conteudo})\n",
+        "        except Exception as e:\n",
+        "            print(f\"\\n❌ Erro de conexão: {e}. Verifique se o servidor Ollama está ativo.\")\n",
+        "            break\n",
+        "\n",
+        "# Iniciar o chatbot\n",
+        "chatbot_interativo(MODELO_CUSTOM, SYSTEM_PROMPT)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "OblMtVkVAebD",
+        "outputId": "a05e8d09-c788-4fe5-dc96-2aac7e6fe8bc"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "============================================================\n",
+            "💬 CHATBOT Suporte - MODO INTERATIVO\n",
+            "   Digite sua mensagem e pressione Enter.\n",
+            "   Para encerrar, digite: sair\n",
+            "============================================================\n",
+            "\n",
+            "👤 Você: Como calculo o dano de um ataque crítico?\n",
+            "🤖 Assistente: Vamos calcular! ⚔️ O dano de um ataque crítico é o dobro dos dados de dano da arma, menos 2 para evitar sobrecarga. Exemplo: se você usa uma espada com 5 pontos de dano e bate em um alvo com 10 pontos de dano, o ataque resulta em 7-8 pontos de dano. 🤯\n",
+            "\n",
+            "👤 Você: Posso realizar uma magia e um ataque físico no mesmo turno?\n",
+            "🤖 Assistente: Não é recomendado! 🧙♂️ Algumas habilidades são restritas a uma única categoria (magia vs. ataque físico). No entanto, existem algumas exceções como as \"Ações Bônus\" e as \"Habilidades de Nível Lendário\". Verifique com seu mestre! ⏳\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
