@@ -15,6 +15,7 @@ Nome: Angela Sousa Takezawa
 RM: 570797
 
 Nome: Nickolas Emanuel da Costa Rengel Tellez
+
 RM: 573483
 
 
