@@ -6,6 +6,10 @@ Nome: Nathan Hiroshi Watanabe
 
 RM: 572806
 
+Nome: Rodrigo Zambelle
+
+RM:570425
+
 Nome: Angela Sousa Takezawa
 
 RM: 570797
