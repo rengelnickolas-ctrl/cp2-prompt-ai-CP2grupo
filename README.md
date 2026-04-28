@@ -13,3 +13,9 @@ RM:570425
 Nome: Angela Sousa Takezawa
 
 RM: 570797
+
+
+
+
+
+Justificativa:  Escolhemos esse dominio pela familiaridade com o tema e interesse em suas respostas sobre determinados assuntos gerais
