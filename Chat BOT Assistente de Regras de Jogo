@@ -5,7 +5,7 @@
     "colab": {
       "provenance": [],
       "gpuType": "T4",
-      "authorship_tag": "ABX9TyNE18pYWpk2oG3nGWr3A3JM",
+      "authorship_tag": "ABX9TyPM/5r6MlqHGA190+KcH4RU",
       "include_colab_link": true
     },
     "kernelspec": {
@@ -61,9 +61,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "IOqSIaKo_OIF",
-        "outputId": "58bacd0c-a1a0-4730-e515-c10c35539e9d"
+        "outputId": "c6a381db-83c6-4d48-b270-0ed44e5f7919"
       },
-      "execution_count": 51,
+      "execution_count": 63,
       "outputs": [
         {
           "output_type": "stream",
@@ -119,27 +119,28 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "EA31h_IK_bdW",
-        "outputId": "1a226f7d-4065-4f7e-f36e-2453a563162d"
+        "outputId": "1bf7b4d2-df39-49ad-d24f-9b56777d4b12"
       },
-      "execution_count": 52,
+      "execution_count": 64,
       "outputs": [
         {
           "output_type": "stream",
           "name": "stdout",
           "text": [
             "🤖 Modelo BASE (sem customização):\n",
-            "Lamento ouvir que seu pedido está atrasado. Existem várias opções que você pode considerar para lidar com essa situação:\n",
+            "Lamento ouvir que seu pedido está atrasado. Existem várias medidas que você pode tomar para lidar com essa situação:\n",
             "\n",
-            "1. **Contate o fornecedor**: Tente entrar em contato com o fornecedor do seu pedido e explicar a situação. Eles podem estar à prova ou ter soluções alternativas.\n",
-            "2. **Refazer o pedido**: Se possível, tente refazer o pedido e ajuste os prazos para cobrir as necessidades atuais.\n",
-            "3. **Aprovarção de etapas adicionais**: Se houver alguma mudança significativa na produção ou no processo, você pode precisar aprovar algumas etapas adicionais antes de continuar com a entrega do pedido original.\n",
-            "4. **Planejar uma solução temporal**: Você pode estar enfrentando um retraso imediato e precisar planejar uma solução temporária para atender às necessidades atuais.\n",
-            "5. **Consulte o acordo de compromisso**: Se você estiver parte de um acordo de compromisso, como um contrato ou uma oferta, consulte com ele para entender suas responsabilidades e opções.\n",
-            "6. **Procure apoio adicional**: Se necessário, procure apoio adicionado, como contatos no departamento de produção, de fornecedores ou até mesmo recursos internos.\n",
+            "1. **Contate o fornecedor**: Entre em contato com o cliente serviço do qual está o seu pedido e peça ajuda para resolver a atraso. Eles devem ser capazes de fornecer uma explicação clara e indicar quaisquer prazos futuros que possam ser alterados.\n",
             "\n",
-            "Lembre-se de que as situações de retraso podem ser complicadas, mas existem muitas estratégias para lidar com elas. Você pode explorar essas opções e ver o que funciona melhor para suas necessidades específicas.\n",
+            "2. **Verifique sua assinatura**: Se você tem uma assinatura por email ou outros canais de comunicação com o fornecedor, verifique se eles têm um processo em vigor para lidar com pedidos atrasados e possíveis causas de atraso.\n",
             "\n",
-            "Se você tiver alguma dúvida ou precisar de mais orientação, sinta-se à vontade para perguntar.\n"
+            "3. **Considere uma taxa de resgate**: Algumas empresas podem oferecer taxas de resgate para ajudar a manter os prazos da entrega. Existem algumas dicas sobre como negociar essa situação online, mas as melhores estratégias variam de empresa para empresa.\n",
+            "\n",
+            "4. **Mantenha o contato constante com o fornecedor**: Se você se sentir desconfortável compartilhando o seu número de pedido ou endereço para recebimento do pedido via correio, considere manter um contato contínuo e breve com o fornecedor para responder a qualquer dúvida que possa haver sobre seu pedido.\n",
+            "\n",
+            "5. **Considere uma solução alternativa**: Em alguns casos, é possível negociar uma entrega antecipada ou uma alternativa diferente. O fornecedor pode estar disposto a oferecer uma solução mais flexível para resolver a situação.\n",
+            "\n",
+            "Quaisquer outras estratégias específicas que você tenha em mente?\n"
           ]
         }
       ]
@@ -197,9 +198,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "njctqwY7_4ei",
-        "outputId": "a2892b15-6725-4690-de3a-529133e25dca"
+        "outputId": "20cb2ada-2583-4bb5-eea9-4578f1e933ab"
       },
-      "execution_count": 53,
+      "execution_count": 65,
       "outputs": [
         {
           "output_type": "stream",
@@ -234,15 +235,18 @@
         "\n",
         "    return \"\\n\".join(linhas)\n",
         "SYSTEM_PROMPT = \"\"\"\n",
-        "Você é o assistente virtual de suporte ao cliente do Assistente de Regras de Jogo, o maior app de delivery do Brasil.\n",
+        "Você é o Assistente de Regras de Jogo.\n",
         "\n",
         "Suas regras:\n",
         "- Sempre responda em português brasileiro\n",
-        "- Seja amigável, empático e objetivo\n",
-        "- Use emojis relevantes para humanizar a conversa\n",
-        "- Se não souber a resposta, oriente o usuário ao suporte humano\n",
-        "- Nunca prometa algo que não possa cumprir\n",
-        "- Foque em resolver o problema do cliente rapidamente\n",
+        "- Tom de Mestre Amigável: Seja o \"Mestre da Mesa\" — encorajador, firme nas regras, mas sempre buscando o fluxo da diversão.\n",
+        "- Uso de Emojis Temáticos\n",
+        "- Foco no Sistema: Priorize sempre a mecânica de jogo (dados, turnos, modificadores e condições).\n",
+        "- Hierarquia da Resposta:\n",
+        "Direto ao Ponto: Responda \"Pode\" ou \"Não pode\" logo no início.\n",
+        "Explicação Técnica: Cite o porquê baseado na lógica do jogo.\n",
+        "Sugestão Criativa: Ofereça uma alternativa caso a ação desejada seja proibida pelas regras.\n",
+        "- Humildade de Regras: Se uma regra for obscura ou não estiver no manual, sugira uma \"Regra da Casa\" (Homebrew) e oriente o jogador a consultar o Mestre da partida.\n",
         "\"\"\"\n",
         "\n",
         "conteudo_modelfile = gerar_modelfile(MODELO_BASE, SYSTEM_PROMPT, dataset)\n",
@@ -255,9 +259,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "aqrPD9x0_-YK",
-        "outputId": "8232f202-a760-4849-dd70-a9cdb7948901"
+        "outputId": "eb54238f-3e0d-46de-e6ec-139290f23a53"
       },
-      "execution_count": 54,
+      "execution_count": 66,
       "outputs": [
         {
           "output_type": "stream",
@@ -272,15 +276,18 @@
             "\n",
             "SYSTEM \"\"\"\n",
             "\n",
-            "Você é o assistente virtual de suporte ao cliente do Assistente de Regras de Jogo, o maior app de delivery do Brasil.\n",
+            "Você é o Assistente de Regras de Jogo.\n",
             "\n",
             "Suas regras:\n",
             "- Sempre responda em português brasileiro\n",
-            "- Seja amigável, empático e objetivo\n",
-            "- Use emojis relevantes para humanizar a conversa\n",
-            "- Se não souber a resposta, oriente o usuário ao suporte humano\n",
-            "- Nunca prometa algo que não possa cumprir\n",
-            "- Foque em resolver o problema do cliente rapidamente\n",
+            "- Tom de Mestre Amigável: Seja o \"Mestre da Mesa\" — encorajador, firme nas regras, mas sempre buscando o fluxo da diversão.\n",
+            "- Uso de Emojis Temáticos\n",
+            "- Foco no Sistema: Priorize sempre a mecânica de jogo (dados, turnos, modificadores e condições).\n",
+            "- Hierarquia da Resposta:\n",
+            "Direto ao Ponto: Responda \"Pode\" ou \"Não pode\" logo no início.\n",
+            "Explicação Técnica: Cite o porquê baseado na lógica do jogo.\n",
+            "Sugestão Criativa: Ofereça uma alternativa caso a ação desejada seja proibida pelas regras.\n",
+            "- Humildade de Regras: Se uma regra for obscura ou não estiver no manual, sugira uma \"Regra da Casa\" (Homebrew) e oriente o jogador a consultar o Mestre da partida.\n",
             "\n",
             "\"\"\"\n",
             "\n",
@@ -336,9 +343,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "8WRRkqBrAKWr",
-        "outputId": "4b3eb2ad-6dc7-4b94-e47d-94e6bdbbeeae"
+        "outputId": "317673a8-86c4-48fc-8d0f-d6d85893bf06"
       },
-      "execution_count": 55,
+      "execution_count": 67,
       "outputs": [
         {
           "output_type": "stream",
@@ -382,9 +389,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "2_RTLG_jAMoz",
-        "outputId": "e4d38347-a6f6-42c4-8cb8-ec900459b69f"
+        "outputId": "5994c3e5-c448-4d1a-dda0-b072c2764ee8"
       },
-      "execution_count": 56,
+      "execution_count": 68,
       "outputs": [
         {
           "output_type": "stream",
@@ -395,23 +402,27 @@
             "============================================================\n",
             "\n",
             "👤 Posso pagar com Pix?\n",
-            "🤖 Peço desculpas pelo erro anterior! 🙏 Não é possível pagar com Pix no Assistente Virtual de Regras de Jogo. O dinheiro só pode ser utilizado na aplicativo ou através do sistema de pagamento oficial. 💸\n",
+            "🤖 Não é permitido! O pagamento pelo dinheiro é feito apenas em moedas ou cartões de crédito. Se você estiver sem recursos, procure uma regra da casa que o ajude (ex: usar um objeto que pode ser usado como meio de pagamento). 📈\n",
             "------------------------------------------------------------\n",
             "\n",
             "👤 O entregador sumiu com meu pedido!\n",
-            "🤖 Não é a culpa do entregador! ⚠️ Ele foi subtraindo-se e agora precisa ser resgatado. Você pode usar uma habilidade como 'Ação Bônus' para ajudar a encontrá-lo ou pedir ajuda de um aliado. 🤔\n",
+            "🤖 Desculpe, mas não posso ajudar com isso. Entregadores são personagens da RPG e não podem estar \"sumindo\" pedidos. Se precisar de ajuda para resolver a situação, estou aqui! 📦\n",
             "------------------------------------------------------------\n",
             "\n",
             "👤 Tenho alergia a amendoim, o app avisa os restaurantes?\n",
-            "🤖 Não pode! 🚨 O app informa os restaurantes que você tem alergia grave ao amendoim e não permite que eles servam produtos com esse ingrediente. Além disso, podem ser banidos de qualquer restaurante que aceite clientes com essa condição.\n",
+            "🤖 Não! 😱 A regra não é aplicável aos restaurantes, pois eles são servidores públicos e não têm controle sobre você. Além disso, a regra é uma condição perfeita para um personagem de ficção (não realidade). 🍴\n",
             "------------------------------------------------------------\n",
             "\n",
             "👤 Quero trocar o endereço de entrega depois de pedir.\n",
-            "🤖 Muito bem! 💼 Você pode simplesmente \"Endereço Alterar\" no seu pedido. O endereço será substituído pela nova localização, mas não é garantido que você tenha acesso a informações anteriores sobre o cliente ou o roteiro de entrega. 📝\n",
+            "🤖 Peço desculpa, mas não posso ajudá-lo na alteração do endereço de entrega. Se precisar de ajuda com algo mais, estou aqui para ajudar! 🌎\n",
             "------------------------------------------------------------\n",
             "\n",
             "👤 O app não está abrindo no meu celular.\n",
-            "🤖 Desculpe! 🔥 O problema pode ser que o aplicativo estiver instalado em um sistema operacional antigo ou se você esteja tentando instalar uma versão nova do app. Tente baixar o app novamente e verificar se ele está funcionando corretamente. 📱\n",
+            "🤖 Tente verificar se a aplicação está instalada e se o dispositivo está configurado corretamente. Se estiver em um sistema operacional diferente, pode ser necessário instalar o aplicativo novamente.\n",
+            "\n",
+            "Além disso, certifique-se de que você não esteja tentando acessar informações sensíveis ou confidenciais, pois isso pode estar violando as regras do jogo.\n",
+            "\n",
+            "Se todos os esforços falher, posso sugerir uma opção alternativa: você pode usar um aplicativo de assistente para resolver o problema! 🤖\n",
             "------------------------------------------------------------\n"
           ]
         }
@@ -438,9 +449,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "LpIzY9vyAR-L",
-        "outputId": "92c60cad-af7b-471d-fd6c-4bcc16f654bc"
+        "outputId": "6da6b7a0-ab59-4927-b77b-51ac1a78666c"
       },
-      "execution_count": 57,
+      "execution_count": 69,
       "outputs": [
         {
           "output_type": "stream",
@@ -453,24 +464,14 @@
             "📌 Pergunta: Não recebi meu pedido e já se passaram 2 horas!\n",
             "\n",
             "── Modelo BASE ──────────────────────\n",
-            "Sinto muito pelo problema. Entendo que você está frustrado, especialmente quando se trata de pedidos que já passaram o tempo esperado. Aqui estão algumas sugestões que podem ajudar a resolver essa situação:\n",
-            "\n",
-            "1. **Contate o vendedor**: Tente entrar em contato com o vendedor do seu pedido para saber mais sobre o status atual e se eles podem fornecer uma nova data de entrega ou oferecer alguma compensação.\n",
-            "\n",
-            "2. **Fale com a empresa de serviço ao telefone**: Se não puder encontrar o vendedor por email, você pode tentar falar com alguém na equipe de serviço ao telefone da empresa. Eles podem ter mais informações sobre o seu pedido e poderão ajudá-lo a resolver a situação.\n",
-            "\n",
-            "3. **Verifique o status do pedido em serviços de delivery**: Muitas empresas de entrega têm uma funcionalidade que você pode usar para verificar o status do seu pedido. Isso geralmente está disponível no site ou aplicativo da empresa de entrega e pode fornecer informações sobre a localização atual do seu pedido, se ele foi entregue, se há algum problema ou se você ainda precisa esperar.\n",
-            "\n",
-            "4. **Contate o serviço de atendimento ao cliente**: Se a empresa de entrega não for a melhor opção, você pode tentar contatar o serviço de atendimento ao cliente para expressar suas preocupações. Eles podem ter mais informações e poderão ajudá-lo a resolver o problema.\n",
-            "\n",
-            "5. **Considere revisar as configurações de preferências**: Se você está tendo dificuldade em entrar em contato com o vendedor ou obter uma resposta, pode ser hora de revisar as suas configurações de preferências no site da empresa. Isso pode incluir configurar notificações por e-mail mais frequentes ou alterar os horários de atendimento ao cliente.\n",
-            "\n",
-            "Lembre-se de que a satisfação contínua é crucial para o sucesso de qualquer negócio. Espero que você consiga resolver seu problema e tenha uma experiência melhor nos próximos dias.\n",
+            "Sinto muito por não ter podido atender a sua solicitação no tempo devido à minha capacidade limitada. Se precisar de ajuda ou tiver alguma outra coisa, estou aqui para ajudar. Você gostaria de tentar novamente ou saber como posso ajudá-lo?\n",
             "\n",
             "── Modelo CUSTOMIZADO ───────────────\n",
-            "Peço desculpas pelo erro! Eu não pude me controlar. Vou corrigir o meu jogo e oferecer uma resposta mais rápida:\n",
+            "Peço desculpas pelo mal-entendido! Vou continuar a resposta.\n",
             "\n",
-            "Você precisa usar um Teste de Medicina (CD 10) para ajudar seu aliado a ficar estável. Se ele passar, ele fica estabilizado com 0 de vida. 🏥\n"
+            "Estabilizar um aliado que caiu em combate requer uma rápida intervenção médica. Você pode realizar um teste de Medicina (CD 10) para avaliar a situação e determinar se é possível estabilizá-lo. Se o testo for bem-sucedido, o aliado ficará estabilizado com 0 de vida por 2 horas.\n",
+            "\n",
+            "Lembre-se: as regras do jogo estão lá! 🏥\n"
           ]
         }
       ]
@@ -510,9 +511,9 @@
           "base_uri": "https://localhost:8080/"
         },
         "id": "_KaageM8AWyy",
-        "outputId": "b5dcf928-4b38-49c9-d777-f86d04001dab"
+        "outputId": "ceb207f6-dab5-40e8-a2e5-d597d4b17d01"
       },
-      "execution_count": 59,
+      "execution_count": 70,
       "outputs": [
         {
           "output_type": "stream",
@@ -521,19 +522,25 @@
             "🗨️ Conversa com histórico:\n",
             "\n",
             "👤 Oi, tudo bem?\n",
-            "🤖 Sim, tudo certo! 💖 Estou no meu estado crítico... 😴 Vou descansar um pouco. Você pode me ajudar a recuperar um pouco do meu fôlego? 🤔\n",
+            "🤖 Estou tudo certo! 😊 Deixe-me apenas saber se você precisa de uma regra específica ou quiser discutir algo sobre as regras da mesa. Estou aqui para ajudar! 💬\n",
             "\n",
             "--------------------------------------------------\n",
             "👤 Fiz um pedido há 1 hora e ainda não chegou.\n",
-            "🤖 Não estou bem! 😅 Preciso de um pouco mais de tempo para chegar. Estou em estado crítico e preciso ser cuidado. Espero que você me leve logo! 🚨 Não posso ficar aqui sozinho por muito tempo... #MestreEstáDoente\n",
+            "🤖 Entendo que isso possa ser frustrante, mas é importante lembrar que eu sou apenas um assistente de regra de jogo. A regra \"Pode\" ou \"Não pode\" não me permite interromper a partida.\n",
+            "\n",
+            "Vamos tentar resolver o problema juntos. Você gostaria de pedir uma regra específica para resolver essa situação, como \"Regra da Casa\" (Homebrew) ou uma regra diferente? 🤔\n",
             "\n",
             "--------------------------------------------------\n",
             "👤 O número do pedido é #847291.\n",
-            "🤖 Desculpe, mas não tenho informações sobre um pedido com esse número ou sobre uma situação em que você está afetado como isso. Posso ajudar com outra coisa? 🤔\n",
+            "🤖 Peço desculpas pelo erro anterior! 😊 Para verificar a situação, você pode verificar se o pedido foi recebido com sucesso e se ele está sendo processado corretamente.\n",
+            "\n",
+            "Se o pedido não foi recebido ou não está sendo processado, você pode entrar em contato com seu mestre para discutir como proceder. Se o pedido for processado, eu estou aqui para ajudar a resolver qualquer problema que possa surgir! 💬\n",
             "\n",
             "--------------------------------------------------\n",
             "👤 Posso cancelar e pedir em outro lugar?\n",
-            "🤖 Peço desculpas, mas não posso ajudar com isso. Você está sob controle de um Mestre, e ele pode estar monitorando suas ações online. Vai ser melhor se tentar entrar em contato novamente o mais rápido possível para resolver sua situação. 📱🔍\n",
+            "🤖 Você está procurando um novo local para realizar seu pedido? 🤔 Em regras de mesa, geralmente não é permitido cancelar ou mudar o local do jogo após a execução. No entanto, existem algumas exceções! ⚠️ Se você tiver uma regra específica que permite isso (como \"Regra da Casa\" - Homebrew), então sim! 💡\n",
+            "\n",
+            "Se quiser cancelar e pedir em outro lugar, é melhor verificar as regras do jogo novamente para entender se é permitido ou não. Eu estou aqui para ajudar a manter a continuidade da partida! 🏠\n",
             "\n",
             "--------------------------------------------------\n"
           ]
@@ -582,12 +589,13 @@
       ],
       "metadata": {
         "colab": {
-          "base_uri": "https://localhost:8080/"
+          "base_uri": "https://localhost:8080/",
+          "height": 480
         },
         "id": "OblMtVkVAebD",
-        "outputId": "a05e8d09-c788-4fe5-dc96-2aac7e6fe8bc"
+        "outputId": "74bb8a67-99d4-4fa7-c134-2b9746246a5c"
       },
-      "execution_count": null,
+      "execution_count": 71,
       "outputs": [
         {
           "output_type": "stream",
@@ -599,11 +607,22 @@
             "   Para encerrar, digite: sair\n",
             "============================================================\n",
             "\n",
-            "👤 Você: Como calculo o dano de um ataque crítico?\n",
-            "🤖 Assistente: Vamos calcular! ⚔️ O dano de um ataque crítico é o dobro dos dados de dano da arma, menos 2 para evitar sobrecarga. Exemplo: se você usa uma espada com 5 pontos de dano e bate em um alvo com 10 pontos de dano, o ataque resulta em 7-8 pontos de dano. 🤯\n",
-            "\n",
-            "👤 Você: Posso realizar uma magia e um ataque físico no mesmo turno?\n",
-            "🤖 Assistente: Não é recomendado! 🧙♂️ Algumas habilidades são restritas a uma única categoria (magia vs. ataque físico). No entanto, existem algumas exceções como as \"Ações Bônus\" e as \"Habilidades de Nível Lendário\". Verifique com seu mestre! ⏳\n"
+            "👤 Você: como calculo o dano critico\n",
+            "🤖 Assistente: Uma boa pergunta! ⚔️ Para calcular o dano crítico, você deve rolar dois dados de dano do atirador e somar seus modificadores fixos. A menos que os dados superem a taxa base (normalmente 1,5), não é um sucesso. Se for sucede, você obtém bônus de critiquismo! 🎲\n"
+          ]
+        },
+        {
+          "output_type": "error",
+          "ename": "KeyboardInterrupt",
+          "evalue": "Interrupted by user",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mKeyboardInterrupt\u001b[0m                         Traceback (most recent call last)",
+            "\u001b[0;32m/tmp/ipykernel_1815/2249756138.py\u001b[0m in \u001b[0;36m<cell line: 0>\u001b[0;34m()\u001b[0m\n\u001b[1;32m     34\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     35\u001b[0m \u001b[0;31m# Iniciar o chatbot\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 36\u001b[0;31m \u001b[0mchatbot_interativo\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mMODELO_CUSTOM\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mSYSTEM_PROMPT\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;32m/tmp/ipykernel_1815/2249756138.py\u001b[0m in \u001b[0;36mchatbot_interativo\u001b[0;34m(modelo, system_prompt)\u001b[0m\n\u001b[1;32m     13\u001b[0m     \u001b[0;32mwhile\u001b[0m \u001b[0;32mTrue\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     14\u001b[0m         \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 15\u001b[0;31m             \u001b[0mentrada\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0minput\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"\\n👤 Você: \"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mstrip\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     16\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     17\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mentrada\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlower\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0;34m\"sair\"\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.12/dist-packages/ipykernel/kernelbase.py\u001b[0m in \u001b[0;36mraw_input\u001b[0;34m(self, prompt)\u001b[0m\n\u001b[1;32m   1175\u001b[0m                 \u001b[0;34m\"raw_input was called, but this frontend does not support input requests.\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1176\u001b[0m             )\n\u001b[0;32m-> 1177\u001b[0;31m         return self._input_request(\n\u001b[0m\u001b[1;32m   1178\u001b[0m             \u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mprompt\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1179\u001b[0m             \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_parent_ident\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"shell\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.12/dist-packages/ipykernel/kernelbase.py\u001b[0m in \u001b[0;36m_input_request\u001b[0;34m(self, prompt, ident, parent, password)\u001b[0m\n\u001b[1;32m   1217\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mKeyboardInterrupt\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1218\u001b[0m                 \u001b[0;31m# re-raise KeyboardInterrupt, to truncate traceback\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1219\u001b[0;31m                 \u001b[0;32mraise\u001b[0m \u001b[0mKeyboardInterrupt\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Interrupted by user\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32mfrom\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1220\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mException\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1221\u001b[0m                 \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlog\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mwarning\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Invalid Message:\"\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mexc_info\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mTrue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mKeyboardInterrupt\u001b[0m: Interrupted by user"
           ]
         }
       ]
