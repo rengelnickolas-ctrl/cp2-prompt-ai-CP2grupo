@@ -1,3 +1,6 @@
 Nome do Projeto: Teste de Fine tuning com chatbot.
 
 Dominio: Assistente de regras de jogos
+
+Nome: Nathan Hiroshi Watanabe
+RM: 572806
