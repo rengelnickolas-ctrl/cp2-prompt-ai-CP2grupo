@@ -22,6 +22,7 @@ Aprendizado - Aprendi a aplicar fine-tuning em modelos de IA, ajustando parâmet
 Nome: Nickolas Emanuel da Costa Rengel Tellez
 
 RM: 573483
+Aprendizado - Entendi melhor sobre como os chatbots operam, geralmente usando IA ou regras para entender perguntas, para identificar e fornecer soluções automaticamente
 
 Nome: Marcelo do Nascimento Batista Pereira
 
