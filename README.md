@@ -27,6 +27,8 @@ Aprendizado - Entendi melhor sobre como os chatbots operam, geralmente usando IA
 Nome: Marcelo do Nascimento Batista Pereira
 
 RM: 569410
+Aprendizado - O modelo base é mais detalhado e didático, mas tem falhas de clareza e termos confusos.
+O modelo customizado é mais direto e informal.
 
 Nome: Rodrigo Fidelis Zarzar Santana
 
