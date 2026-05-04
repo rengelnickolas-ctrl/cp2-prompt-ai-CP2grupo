@@ -27,8 +27,8 @@ RM: 569410
 Nome: Rodrigo Fidelis Zarzar Santana
 
 RM: 572454
-
 Aprendizado - Obtive um maior entendimento sobre o funcionamento de chatbots e como utiliza-los, o que devo escrever no código e o que esperar na saída
+
 ----------------------------------------------------------------------------------------------------------------------
 
 Justificativa:  Escolhemos esse dominio pela familiaridade com o tema e interesse em suas respostas sobre determinados assuntos gerais
