@@ -15,6 +15,7 @@ RM:570425
 Nome: Angela Sousa Takezawa
 
 RM: 570797
+Aprendizado - Aprendi a aplicar fine-tuning em modelos de IA, ajustando parâmetros e melhorando a precisão das respostas do chatbot conforme o contexto desejado
 
 Nome: Nickolas Emanuel da Costa Rengel Tellez
 
