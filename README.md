@@ -12,6 +12,8 @@ Nome: Rodrigo Zambelle
 
 RM:570425
 
+Aprendizado - Aprendi como o chatbot funciona e oque aconteçe quando muda o codigo
+
 Nome: Angela Sousa Takezawa
 
 RM: 570797
