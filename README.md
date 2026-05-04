@@ -5,6 +5,7 @@ Dominio: Assistente de regras de jogos
 Nome: Nathan Hiroshi Watanabe
 
 RM: 572806
+Aprendizado - Aprendi na prática como funciona um chatbot e suas configs. internas, suas alteracões e o que elas significam
 
 Nome: Rodrigo Zambelle
 
